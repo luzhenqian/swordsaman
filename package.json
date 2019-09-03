@@ -1,0 +1,56 @@
+{
+  "name": "swordsman",
+  "version": "1.0.0",
+  "description": "A chinese style UI Toolkit for Web",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 9001 -c .storybook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/luzhenqian/swordsaman.git"
+  },
+  "keywords": [
+    "swordsman",
+    "react",
+    "component",
+    "components",
+    "ui"
+  ],
+  "author": "luzhenqian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/luzhenqian/swordsaman/issues"
+  },
+  "homepage": "https://github.com/luzhenqian/swordsaman#readme",
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^5.1.11",
+    "@storybook/addon-info": "^5.1.11",
+    "@storybook/addon-links": "^5.1.11",
+    "@storybook/addon-notes": "^5.1.11",
+    "@storybook/react": "^5.1.11",
+    "@types/jest": "^24.0.18",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/storybook__react": "^4.0.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.2.0",
+    "jest": "^24.9.0",
+    "node-sass": "^4.12.0",
+    "react-docgen-typescript-loader": "^3.2.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7",
+    "webpack-merge": "^4.2.2"
+  }
+}
