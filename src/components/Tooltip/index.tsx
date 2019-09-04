@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from "react";
-import Styles from "./styles.scss";
+import * as Styles from "./styles.scss";
 
 export enum Placement {
   "bottom-end",
@@ -23,11 +23,41 @@ interface ITooltipProps {
   placement?: Placement; // 出现的位置
 }
 
-interface ITooltipProps {}
+interface ITooltipState {
+  display: string;
+}
 
-class Tooltip extends Component<ITooltipProps, ITooltipProps> {
+class Tooltip extends Component<ITooltipProps, ITooltipState> {
+  public node: Element;
+  public state: ITooltipState = {
+    display: "none"
+  };
+  // private constructor(props: ITooltipProps) {
+  //   super(props);
+  //   this.node = document.createElement("div");
+  //   window.document.body.appendChild(this.node);
+  // }
+  public showTooltip() {
+    this.setState({
+      display: "block"
+    });
+  }
+  public hideTooltip() {
+    this.setState({
+      display: "none"
+    });
+  }
   public render() {
-    return <div className={Styles.a}>{this.props.children}</div>;
+    return (
+      <div
+        className={Styles.container}
+        onMouseOver={this.showTooltip.bind(this)}
+        onMouseOut={this.hideTooltip.bind(this)}
+      >
+        {this.props.children}
+        <div style={{ display: this.state.display }}>{this.props.title}</div>
+      </div>
+    );
   }
 }
 

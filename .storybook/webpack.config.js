@@ -16,7 +16,22 @@ module.exports = ({ config }) => {
     },
     {
       test: /\.scss$/,
-      use: ["style-loader", "css-loader", "sass-loader"],
+      use: [
+        "style-loader",
+        {
+          loader: "typings-for-css-modules-loader",
+          options: {
+            modules: true,
+            // 类名导出
+            namedExport: true,
+            // 支持驼峰命名法
+            camelCase: true,
+            // 使用 sass
+            sass: true
+          }
+        },
+        "sass-loader"
+      ],
       include: path.resolve(__dirname, "../")
     }
   );
