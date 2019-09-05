@@ -1,8 +1,8 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import Tooltip from "./index";
+import Tooltip, { Placement } from "./index";
 import MarkdownText from "./tooltip.md";
-import { withKnobs, text } from "@storybook/addon-knobs";
+import { withKnobs, text, object } from "@storybook/addon-knobs";
 
 const stories = storiesOf("Tooltip", module);
 
@@ -16,10 +16,22 @@ stories
   .add(
     "tooltip",
     () => {
-      const title = text("title", "123");
+      const title = text(
+        "title",
+        `因强大而简单。
+      为你带来深色模式、受专业用户启发的各种功能、三款新 app，以及重新设计的 Mac App Store。`
+      );
+      const placement = object("placement", Placement.bottom);
       return (
-        <Tooltip title={<a href="https://www.baidu.com">1232</a>}>
-          {title}
+        <Tooltip
+          style={{ marginTop: "100px" }}
+          title={title}
+          placement={placement}
+          onOpen={() => {
+            console.log("open !");
+          }}
+        >
+          macOS Mojave
         </Tooltip>
       );
     },

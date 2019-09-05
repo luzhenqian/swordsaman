@@ -1,3 +1,21 @@
 .container {
   display: inline-block;
 }
+
+.tooltip-popper {
+  position: absolute;
+  z-index: 1500;
+  border-radius: 4px;
+  padding: 4px 8px;
+  max-width: 300px;
+  white-space: pre-wrap;
+  text-align: justify;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-weight: 500;
+  font-size: 0.625rem;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+// 暂时不需要加箭头
+.tooltip-arrow {}
