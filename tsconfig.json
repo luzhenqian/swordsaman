@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "build/lib",
+    "outDir": "dist", // 打包构建输出的目录
     "module": "commonjs",
-    "target": "es5",
+    "target": "es5", // 转换目标语言
     "lib": ["es5", "es6", "es7", "es2017", "dom"],
     "sourceMap": true,
     "allowJs": false,
@@ -25,7 +25,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*"], //要打包的目标文件
   "exclude": ["node_modules", "build", "scripts"],
   "files": ["./typings/typed-markdown-modules.d.ts"]
 }

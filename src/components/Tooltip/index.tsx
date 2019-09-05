@@ -132,7 +132,7 @@ const Tooltip = (props: ITooltipProps) => {
       props.onClose();
     }
   };
-  const loadWeight = () => {
+  const loadWH = () => {
     // FIXME:更新状态后，无法获取到宽度
     if (tooltipPopperRef.current !== null) {
       if (
@@ -149,7 +149,7 @@ const Tooltip = (props: ITooltipProps) => {
     }
   };
   useEffect(() => {
-    loadWeight();
+    loadWH();
   });
   return (
     <div
