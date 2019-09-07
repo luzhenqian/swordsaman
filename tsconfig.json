@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "outDir": "dist", // 打包构建输出的目录
-    "module": "commonjs",
-    "target": "es5", // 转换目标语言
+    // "outDir": "dist", // 打包构建输出的目录
+    "module": "esnext",
+    "target": "es6", // 转换目标语言
     "lib": ["es5", "es6", "es7", "es2017", "dom"],
-    "sourceMap": true,
-    "allowJs": false,
+    "sourceMap": true, // TypeScript以将内联源映射输出到已编译的JavaScript文件
+    "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDirs": ["src"],
@@ -17,15 +17,21 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "declaration": true,
+    // "declaration": true, // 不能和 allowJs 同时存在
     // esModuleInterop 和 allowSyntheticDefaultImports 决定可以使用 import React from 'react' 的语法
     // 而不是必须使用 import * as React from 'react'
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "types": ["styled-components"]
   },
-  "include": ["src/**/*"], //要打包的目标文件
-  "exclude": ["node_modules", "build", "scripts"],
+  "include": ["src/index.tsx", "src/**/*"], //要打包的目标文件
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "src/components/**/*.stories.tsx"
+  ], // 不要打包的文件
   "files": ["./typings/typed-markdown-modules.d.ts"]
 }

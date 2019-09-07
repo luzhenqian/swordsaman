@@ -5,6 +5,7 @@ const config = {
   entry: "./src/index.tsx",
   output: {
     filename: "swordsman.js",
+    // libraryExport: "default",
     libraryTarget: "umd",
     library: "swordsman",
     path: path.resolve(__dirname, "../dist")
@@ -35,8 +36,12 @@ const config = {
       }
     ]
   },
-
-  plugins: [new CleanWebpackPlugin()]
+  // 打包时不打包react和react-dom
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM"
+  }
+  // plugins: [new CleanWebpackPlugin()]
 };
 
 module.exports = config;

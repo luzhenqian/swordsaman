@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import Tooltip, { Placement } from "./index";
 import MarkdownText from "./tooltip.md";
-import { withKnobs, text, object } from "@storybook/addon-knobs";
+import { withKnobs, text } from "@storybook/addon-knobs";
 
 const stories = storiesOf("Tooltip", module);
 
@@ -21,14 +21,17 @@ stories
         `因强大而简单。
       为你带来深色模式、受专业用户启发的各种功能、三款新 app，以及重新设计的 Mac App Store。`
       );
-      const placement = object("placement", Placement.bottom);
+      const placement = text("placement", Placement.bottom);
       return (
         <Tooltip
           style={{ marginTop: "100px" }}
           title={title}
-          placement={placement}
+          placement={placement as Placement}
           onOpen={() => {
             console.log("open !");
+          }}
+          onClose={() => {
+            console.log("close!");
           }}
         >
           macOS Mojave

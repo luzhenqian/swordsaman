@@ -1,5 +1,5 @@
 import React, { ReactNode, useState, useEffect, useRef } from "react";
-import Styles from "./styles.scss";
+import styled from "styled-components";
 
 export enum Placement {
   "bottom-end" = "bottom-end",
@@ -28,6 +28,7 @@ interface ITooltipProps {
 const Tooltip = (props: ITooltipProps) => {
   const [style, setStyle] = useState({ display: "block", opacity: 0 });
   const [wh, setWH] = useState({ width: 0, height: 0 });
+  const [tl, setTL] = useState({ top: "0", left: "0" });
   const containerRef = useRef<HTMLDivElement>(null);
   const tooltipPopperRef = useRef<HTMLDivElement>(null);
   const showTooltip = () => {
@@ -63,63 +64,87 @@ const Tooltip = (props: ITooltipProps) => {
           10}px`;
         switch (props.placement) {
           case Placement.bottom: {
-            tooltipPopperRef.current.style.top = bottomTop;
-            tooltipPopperRef.current.style.left = centerLeft;
+            setTL({
+              top: bottomTop,
+              left: centerLeft
+            });
             break;
           }
           case Placement["bottom-start"]: {
-            tooltipPopperRef.current.style.top = bottomTop;
-            tooltipPopperRef.current.style.left = startLeft;
+            setTL({
+              top: bottomTop,
+              left: startLeft
+            });
             break;
           }
           case Placement["bottom-end"]: {
-            tooltipPopperRef.current.style.top = bottomTop;
-            tooltipPopperRef.current.style.left = endLeft;
+            setTL({
+              top: bottomTop,
+              left: endLeft
+            });
             break;
           }
           case Placement.top: {
-            tooltipPopperRef.current.style.top = topTop;
-            tooltipPopperRef.current.style.left = centerLeft;
+            setTL({
+              top: topTop,
+              left: centerLeft
+            });
             break;
           }
           case Placement["top-start"]: {
-            tooltipPopperRef.current.style.top = topTop;
-            tooltipPopperRef.current.style.left = startLeft;
+            setTL({
+              top: topTop,
+              left: startLeft
+            });
             break;
           }
           case Placement["top-end"]: {
-            tooltipPopperRef.current.style.top = topTop;
-            tooltipPopperRef.current.style.left = endLeft;
+            setTL({
+              top: topTop,
+              left: endLeft
+            });
             break;
           }
           case Placement.left: {
-            tooltipPopperRef.current.style.top = centerTop;
-            tooltipPopperRef.current.style.left = leftLeft;
+            setTL({
+              top: centerTop,
+              left: leftLeft
+            });
             break;
           }
           case Placement["left-start"]: {
-            tooltipPopperRef.current.style.top = startTop;
-            tooltipPopperRef.current.style.left = leftLeft;
+            setTL({
+              top: startTop,
+              left: leftLeft
+            });
             break;
           }
           case Placement["left-end"]: {
-            tooltipPopperRef.current.style.top = endTop;
-            tooltipPopperRef.current.style.left = leftLeft;
+            setTL({
+              top: endTop,
+              left: leftLeft
+            });
             break;
           }
           case Placement.right: {
-            tooltipPopperRef.current.style.top = centerTop;
-            tooltipPopperRef.current.style.left = rightLeft;
+            setTL({
+              top: centerTop,
+              left: rightLeft
+            });
             break;
           }
           case Placement["right-start"]: {
-            tooltipPopperRef.current.style.top = startTop;
-            tooltipPopperRef.current.style.left = rightLeft;
+            setTL({
+              top: startTop,
+              left: rightLeft
+            });
             break;
           }
           case Placement["right-end"]: {
-            tooltipPopperRef.current.style.top = endTop;
-            tooltipPopperRef.current.style.left = rightLeft;
+            setTL({
+              top: endTop,
+              left: rightLeft
+            });
             break;
           }
         }
@@ -148,26 +173,43 @@ const Tooltip = (props: ITooltipProps) => {
       }
     }
   };
+  const Container = styled.div`
+    display: inline-block;
+  `;
+  const TooltipPopper = styled.div`
+    position: absolute;
+    top: ${tl.top};
+    left: ${tl.left};
+    z-index: 1500;
+    border-radius: 4px;
+    padding: 4px 8px;
+    max-width: 300px;
+    white-space: pre-wrap;
+    text-align: justify;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-weight: 500;
+    font-size: 0.625rem;
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  `;
   useEffect(() => {
     loadWH();
   });
+  // 构建后好像不行哎。
   return (
-    <div
-      className={Styles.container}
-      onMouseOver={showTooltip}
-      onMouseOut={hideTooltip}
+    <Container
+      onMouseEnter={showTooltip}
+      onMouseLeave={hideTooltip}
       ref={containerRef}
       style={{ ...props.style }}
     >
+      {/* FIXME: onMouseEnter 和 onMouseLeave 之后，子组件会被重绘，对应的state也会重置 */}
       {props.children}
-      <div
-        ref={tooltipPopperRef}
-        className={Styles.tooltipPopper}
-        style={{ ...style }}
-      >
+      <TooltipPopper ref={tooltipPopperRef} style={{ ...style }}>
         {props.title}
-      </div>
-    </div>
+      </TooltipPopper>
+    </Container>
   );
 };
 
