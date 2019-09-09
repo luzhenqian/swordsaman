@@ -4,7 +4,7 @@
     "module": "esnext",
     "target": "es6", // 转换目标语言
     "lib": ["es5", "es6", "es7", "es2017", "dom"],
-    "sourceMap": true, // TypeScript以将内联源映射输出到已编译的JavaScript文件
+    "sourceMap": false, // TypeScript以将内联源映射输出到已编译的JavaScript文件
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
@@ -24,7 +24,10 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": ["styled-components"]
+    "types": ["styled-components"],
+    "paths": {
+      "@styles/*": ["./src/styles/*"]
+    }
   },
   "include": ["src/index.tsx", "src/**/*"], //要打包的目标文件
   "exclude": [

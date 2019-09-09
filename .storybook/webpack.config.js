@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = ({ config }) => {
   config.module.rules.push(
     {
-      test: /\.ts?$/,
+      test: /\.tsx?$/,
       use: [
         {
           loader: require.resolve("awesome-typescript-loader")
@@ -36,5 +36,12 @@ module.exports = ({ config }) => {
     }
   );
   config.resolve.extensions.push(".ts", ".tsx");
+  config.resolve.alias = {
+    "@styles": path.resolve(__dirname, "../src/styles")
+  };
+  // config.externals = {
+  //   react: "react",
+  //   "react-dom": "react-dom"
+  // };
   return config;
 };

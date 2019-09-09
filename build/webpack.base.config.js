@@ -11,7 +11,11 @@ const config = {
     path: path.resolve(__dirname, "../dist")
   },
   resolve: {
-    extensions: [".ts", ".js", ".tsx", ".jsx"] // 数组内填入什么后缀，引入该后缀文件时可以不带后缀
+    extensions: [".ts", ".js", ".tsx", ".jsx"], // 数组内填入什么后缀，引入该后缀文件时可以不带后缀
+    // alias: {
+    //   react: "react",
+    //   "react-dom": "react-dom"
+    // } // 别名方式寻找路径
   },
   module: {
     rules: [
@@ -38,7 +42,7 @@ const config = {
   },
   // 打包时不打包react和react-dom
   externals: {
-    react: "React",
+    react: "react",
     "react-dom": "ReactDOM"
   }
   // plugins: [new CleanWebpackPlugin()]

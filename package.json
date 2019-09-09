@@ -2,7 +2,7 @@
   "name": "swordsman",
   "version": "1.0.0",
   "description": "A chinese style UI Toolkit for Web",
-  "main": "dist/swordsman.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production --config ./build/webpack.config.js",
@@ -53,12 +53,16 @@
     "react-docgen-typescript-loader": "^3.2.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
-    "styled-components": "^4.3.2",
     "ts-jest": "^24.0.2",
+    "tslint": "^5.19.0",
+    "tslint-react-hooks": "^2.2.1",
     "typescript": "^3.6.2",
     "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7",
     "webpack-merge": "^4.2.2"
+  },
+  "dependencies": {
+    "styled-components": "^4.3.2"
   }
 }
