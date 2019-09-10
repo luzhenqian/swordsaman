@@ -37,6 +37,25 @@ stories
           >
             macOS Mojave
           </Tooltip>
+
+          <div>
+            <Tooltip
+              style={{ marginTop: "100px" }}
+              title="left"
+              placement={Placement.left}
+            >
+              left
+            </Tooltip>
+          </div>
+          <div>
+            <Tooltip
+              style={{ marginTop: "100px" }}
+              title="right"
+              placement={Placement.right}
+            >
+              right
+            </Tooltip>
+          </div>
         </>
       );
     },

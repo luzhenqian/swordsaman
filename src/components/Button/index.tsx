@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { AnyStyledComponent } from "styled-components";
+// import * as R from "ramda";
 
 export enum Color {
   default = "default",
@@ -19,17 +20,25 @@ export enum Type {
   ghost = "ghost"
 }
 
+export enum Size {
+  small = "small",
+  medium = "medium",
+  large = "large"
+}
+
 interface Props {
   children?: React.ReactNode;
   color: Color;
   type: Type;
+  size: Size;
   onClick: Function;
 }
 
-class Button extends React.Component<Props> {
+class Button extends React.Component<Props, any> {
   static defaultProps = {
     color: Color.default,
     type: Type.contained,
+    size: Size.large,
     onClick: Function.prototype
   };
   constructor(props: Props) {
@@ -60,12 +69,14 @@ class Button extends React.Component<Props> {
         background-color: ${hoverColor};
       }
     `;
-    const Button = initStyleByType(
+    const Button2 = initStyleByType(
       ButtonStyle,
       this.props.type,
       color,
       hoverColor
     );
+    const Button = createStyleBySize(Button2, this.props);
+    // initStyle("1");
     return (
       <Button type="button" onClick={this.clickHandler.bind(this)}>
         {this.props.children}
@@ -76,6 +87,10 @@ class Button extends React.Component<Props> {
 
 // TODO: 函数式思维重构
 // initStyle 函数，传递color、type、size、status 等值过去，直接生成样式
+// const initStyle = R.pipe(
+//   initStyleByColor,
+//   initStyleByType
+// );
 
 function initStyleByColor(color: Color): UseColor {
   let _color, hoverColor: string;
@@ -145,6 +160,34 @@ function initStyleByType(
     }
   }
   return style;
+}
+
+function createStyleBySize(component: AnyStyledComponent, props: Props) {
+  switch (props.size) {
+    case Size.small: {
+      return styled(component)`
+        font-size: 12px;
+        padding: 1px 6px;
+        border-radius: 3px;
+      `;
+      break;
+    }
+    case Size.medium:
+    default: {
+      return styled(component)`
+        font-size: 12px;
+        padding: 5px 15px;
+      `;
+      break;
+    }
+    case Size.large: {
+      return styled(component)`
+        font-size: 14px;
+        padding: 6px 15px;
+      `;
+      break;
+    }
+  }
 }
 
 export default Button;

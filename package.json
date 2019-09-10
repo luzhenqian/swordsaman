@@ -63,6 +63,8 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@types/ramda": "^0.26.21",
+    "ramda": "^0.26.1",
     "styled-components": "^4.3.2"
   }
 }
