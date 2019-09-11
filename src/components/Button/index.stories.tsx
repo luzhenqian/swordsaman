@@ -1,6 +1,6 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import Button, { Color, Type, Size } from "./index";
+import Button, { Color, Type, Size, Status } from "./index";
 
 storiesOf("button", module).add(
   "button",
@@ -25,10 +25,37 @@ storiesOf("button", module).add(
       <div>
         <p>Type outlined</p>
         <Button color={Color.primary} type={Type.outlined}>
-          outlined
+          outlined primary
         </Button>
         <Button color={Color.secondary} type={Type.outlined}>
-          outlined
+          outlined secondary
+        </Button>
+      </div>
+      <div>
+        <p>Type ghost</p>
+        <Button color={Color.primary} type={Type.ghost}>
+          ghost
+        </Button>
+        <Button color={Color.secondary} type={Type.ghost}>
+          ghost
+        </Button>
+      </div>
+      <div>
+        <p>Type round</p>
+        <Button color={Color.primary} type={Type.round}>
+          round
+        </Button>
+        <Button color={Color.secondary} type={Type.round}>
+          round
+        </Button>
+      </div>
+      <div>
+        <p>Type circle</p>
+        <Button color={Color.primary} type={Type.circle}>
+          1
+        </Button>
+        <Button color={Color.secondary} type={Type.circle}>
+          234
         </Button>
       </div>
       <div>
@@ -41,6 +68,31 @@ storiesOf("button", module).add(
         </Button>
         <Button color={Color.default} size={Size.large}>
           large
+        </Button>
+      </div>
+      <div>
+        <p>Status</p>
+        <Button
+          type={Type.contained}
+          color={Color.primary}
+          status={Status.default}
+          onClick={() => console.log("click.")}
+        >
+          default
+        </Button>
+        <Button
+          color={Color.secondary}
+          status={Status.loading}
+          onClick={() => console.log("click")}
+        >
+          loading
+        </Button>
+        <Button
+          color={Color.default}
+          status={Status.disabled}
+          onClick={() => console.log("click")}
+        >
+          disabled
         </Button>
       </div>
     </>

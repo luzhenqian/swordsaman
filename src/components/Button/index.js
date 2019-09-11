@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-// import * as R from "ramda";
+import * as R from "ramda";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export var Color;
 (function (Color) {
     Color["default"] = "default";
@@ -13,13 +14,22 @@ export var Type;
     Type["outlined"] = "outlined";
     Type["text"] = "text";
     Type["ghost"] = "ghost";
+    Type["round"] = "round";
+    Type["circle"] = "circle"; // 圆形按钮
 })(Type || (Type = {}));
 export var Size;
 (function (Size) {
+    Size["default"] = "medium";
     Size["small"] = "small";
     Size["medium"] = "medium";
     Size["large"] = "large";
 })(Size || (Size = {}));
+export var Status;
+(function (Status) {
+    Status["default"] = "normal";
+    Status["disabled"] = "disabled";
+    Status["loading"] = "loading";
+})(Status || (Status = {}));
 class Button extends React.Component {
     constructor(props) {
         super(props);
@@ -28,46 +38,199 @@ class Button extends React.Component {
         this.props.onClick(e);
     }
     render() {
-        const { color, hoverColor } = initStyleByColor(this.props.color);
-        const ButtonStyle = styled.button `
-      box-sizing: border-box;
-      margin: 8px;
-      padding: 0.5rem 1rem;
-      border: 0;
-      border-radius: 4px;
-      line-height: 1.5;
-      color: #ffffff;
-      background-color: ${color};
-      box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
-        0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-        0px 3px 1px -2px rgba(0, 0, 0, 0.12);
-      user-select: none;
-      transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-        border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      :hover {
-        background-color: ${hoverColor};
-      }
-    `;
-        const Button2 = initStyleByType(ButtonStyle, this.props.type, color, hoverColor);
-        const Button = createStyleBySize(Button2, this.props);
-        // initStyle("1");
-        return (React.createElement(Button, { type: "button", onClick: this.clickHandler.bind(this) }, this.props.children));
+        const Button = createStyle({
+            component: createBasicStyle(),
+            props: this.props
+        }).component;
+        return (React.createElement(Button, { onClick: this.props.status === Status.default
+                ? this.clickHandler.bind(this)
+                : null },
+            this.props.status === Status.loading ? React.createElement("div", null, "loading...") : "",
+            this.props.children));
     }
 }
 Button.defaultProps = {
     color: Color.default,
     type: Type.contained,
     size: Size.large,
+    status: Status.default,
     onClick: Function.prototype
 };
-// TODO: 函数式思维重构
-// initStyle 函数，传递color、type、size、status 等值过去，直接生成样式
-// const initStyle = R.pipe(
-//   initStyleByColor,
-//   initStyleByType
-// );
-function initStyleByColor(color) {
+const createStyle = R.pipe(createStyleByColor, createStyleByType, createStyleBySize, createStyleByStatus);
+// FIXME:函数式的原则是保持纯函数，直接修改component是有问题的。
+function createStyleByColor(cp) {
+    const { color, hoverColor } = getColorByColor(cp.props.color);
+    const component = styled(cp.component) `
+    background-color: ${color};
+    :hover {
+      background-color: ${hoverColor};
+    }
+  `;
+    return { component, props: cp.props };
+}
+function createStyleByType(cp) {
+    let styledComponent;
+    const { color, hoverColor } = getColorByColor(cp.props.color);
+    switch (cp.props.type) {
+        case Type.text: {
+            styledComponent = styled(cp.component) `
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        color: ${hoverColor};
+        :hover {
+          background-color: ${color};
+        }
+      `;
+            break;
+        }
+        case Type.outlined: {
+            styledComponent = styled(cp.component) `
+        background-color: transparent;
+        border: 1px solid ${color};
+        box-shadow: none;
+        color: ${hoverColor};
+        :hover {
+          background-color: ${color};
+        }
+      `;
+            break;
+        }
+        case Type.ghost: {
+            styledComponent = styled(cp.component) `
+        background-color: transparent;
+        color: ${color};
+        box-shadow: none;
+        border: ${color} 1px solid;
+        :hover {
+          color: ${hoverColor};
+          border-color: ${hoverColor};
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+      `;
+            break;
+        }
+        case Type.round: {
+            styledComponent = styled(cp.component) `
+        border-radius: 20px;
+        padding: 12px 23px;
+      `;
+            break;
+        }
+        case Type.circle: {
+            styledComponent = styled(cp.component) `
+        border-radius: 50%;
+        padding: 0px;
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+        overflow: hidden;
+      `;
+            break;
+        }
+        case Type.contained:
+        default: {
+            styledComponent = styled(cp.component) ``;
+            break;
+        }
+    }
+    return {
+        component: styledComponent,
+        props: cp.props
+    };
+}
+function createStyleBySize(cp) {
+    switch (cp.props.size) {
+        case Size.small: {
+            return {
+                component: styled(cp.component) `
+          font-size: 12px;
+          padding: ${cp.props.type === Type.circle ? "0px" : "1px 6px"};
+          border-radius: 3px;
+        `,
+                props: cp.props
+            };
+        }
+        case Size.medium:
+        default: {
+            return {
+                component: styled(cp.component) `
+          font-size: 12px;
+          padding: ${cp.props.type === Type.circle ? "0px" : "5px 15px"};
+        `,
+                props: cp.props
+            };
+        }
+        case Size.large: {
+            return {
+                component: styled(cp.component) `
+          font-size: 14px;
+          padding: ${cp.props.type === Type.circle ? "0px" : "6px 15px"};
+        `,
+                props: cp.props
+            };
+        }
+    }
+}
+function createStyleByStatus(cp) {
+    const { color } = getColorByColor(cp.props.color);
+    switch (cp.props.status) {
+        case Status.disabled: {
+            return {
+                component: styled(cp.component) `
+          /* pointer-events: none; */
+          /* 阻止点击事件，但是会让 cursor 也失效 */
+          cursor: not-allowed;
+          opacity: 0.6;
+          :hover {
+            background-color: ${color};
+          }
+        `,
+                props: cp.props
+            };
+        }
+        case Status.loading: {
+            return {
+                component: styled(cp.component) `
+          cursor: default;
+          opacity: 0.6;
+          :hover {
+            background-color: ${color};
+          }
+        `,
+                props: cp.props
+            };
+        }
+        case Status.default:
+        default: {
+            return {
+                component: cp.component,
+                props: cp.props
+            };
+        }
+    }
+}
+function createBasicStyle() {
+    return styled.button `
+    box-sizing: border-box;
+    margin: 8px;
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-radius: 4px;
+    line-height: 1.5;
+    color: #ffffff;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+    user-select: none;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+      border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    :focus {
+      outline: none;
+    }
+  `;
+}
+function getColorByColor(color) {
     let _color, hoverColor;
     switch (color) {
         case Color.primary: {
@@ -91,70 +254,5 @@ function initStyleByColor(color) {
         color: _color,
         hoverColor
     };
-}
-// FIXME:函数式的原则是保持纯函数，直接修改component是有问题的。
-function initStyleByType(component, type, color, hoverColor) {
-    let style;
-    switch (type) {
-        case Type.text: {
-            style = styled(component) `
-        background-color: transparent;
-        border: 0;
-        box-shadow: none;
-        color: ${hoverColor};
-        :hover {
-          background-color: ${color};
-        }
-      `;
-            break;
-        }
-        case Type.outlined: {
-            style = styled(component) `
-        background-color: transparent;
-        border: 1px solid ${color};
-        box-shadow: none;
-        color: ${hoverColor};
-        :hover {
-          background-color: ${color};
-        }
-      `;
-            break;
-        }
-        case Type.ghost: {
-        }
-        case Type.contained:
-        default: {
-            style = styled(component) ``;
-            break;
-        }
-    }
-    return style;
-}
-function createStyleBySize(component, props) {
-    switch (props.size) {
-        case Size.small: {
-            return styled(component) `
-        font-size: 12px;
-        padding: 1px 6px;
-        border-radius: 3px;
-      `;
-            break;
-        }
-        case Size.medium:
-        default: {
-            return styled(component) `
-        font-size: 12px;
-        padding: 5px 15px;
-      `;
-            break;
-        }
-        case Size.large: {
-            return styled(component) `
-        font-size: 14px;
-        padding: 6px 15px;
-      `;
-            break;
-        }
-    }
 }
 export default Button;
