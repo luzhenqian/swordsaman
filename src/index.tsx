@@ -7,5 +7,6 @@
 // const GlobalStyle = createGlobalStyle`
 //   div{ background-color: red;}
 // `;
+
 export { default as Tooltip } from "./components/Tooltip";
 export { default as Button } from "./components/Button";

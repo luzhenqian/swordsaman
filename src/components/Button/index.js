@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import * as R from "ramda";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Icon from "../Icon";
+import { animation } from "polished";
 export var Color;
 (function (Color) {
     Color["default"] = "default";
@@ -10,6 +11,7 @@ export var Color;
 })(Color || (Color = {}));
 export var Type;
 (function (Type) {
+    Type["default"] = "contained";
     Type["contained"] = "contained";
     Type["outlined"] = "outlined";
     Type["text"] = "text";
@@ -38,42 +40,53 @@ class Button extends React.Component {
         this.props.onClick(e);
     }
     render() {
-        const Button = createStyle({
-            component: createBasicStyle(),
-            props: this.props
-        }).component;
+        const createStyle = R.pipe(R.curry(createStyleByColor)(R.__, this.props), R.curry(createStyleByType)(R.__, this.props), R.curry(createStyleBySize)(R.__, this.props), R.curry(createStyleByStatus)(R.__, this.props));
+        const Button = createStyle(createBasicStyle());
+        // 设置动画不管用
+        const Rotate = styled.span `
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      animation: spin 1s linear infinite;
+      /* ${animation(["spin", "1s", "linear", "infinite"])} */
+    `;
         return (React.createElement(Button, { onClick: this.props.status === Status.default
                 ? this.clickHandler.bind(this)
                 : null },
-            this.props.status === Status.loading ? React.createElement("div", null, "loading...") : "",
+            this.props.status === Status.loading ? (React.createElement(Rotate, null,
+                React.createElement(Icon, { icon: "spinner" }))) : (""),
             this.props.children));
     }
 }
 Button.defaultProps = {
     color: Color.default,
-    type: Type.contained,
-    size: Size.large,
+    type: Type.default,
+    size: Size.default,
     status: Status.default,
     onClick: Function.prototype
 };
-const createStyle = R.pipe(createStyleByColor, createStyleByType, createStyleBySize, createStyleByStatus);
 // FIXME:函数式的原则是保持纯函数，直接修改component是有问题的。
-function createStyleByColor(cp) {
-    const { color, hoverColor } = getColorByColor(cp.props.color);
-    const component = styled(cp.component) `
+function createStyleByColor(component, props) {
+    const { color, hoverColor } = getColorByColor(props.color);
+    const _component = styled(component) `
     background-color: ${color};
     :hover {
       background-color: ${hoverColor};
     }
   `;
-    return { component, props: cp.props };
+    return _component;
 }
-function createStyleByType(cp) {
+function createStyleByType(component, props) {
     let styledComponent;
-    const { color, hoverColor } = getColorByColor(cp.props.color);
-    switch (cp.props.type) {
+    const { color, hoverColor } = getColorByColor(props.color);
+    switch (props.type) {
         case Type.text: {
-            styledComponent = styled(cp.component) `
+            styledComponent = styled(component) `
         background-color: transparent;
         border: 0;
         box-shadow: none;
@@ -85,7 +98,7 @@ function createStyleByType(cp) {
             break;
         }
         case Type.outlined: {
-            styledComponent = styled(cp.component) `
+            styledComponent = styled(component) `
         background-color: transparent;
         border: 1px solid ${color};
         box-shadow: none;
@@ -97,7 +110,7 @@ function createStyleByType(cp) {
             break;
         }
         case Type.ghost: {
-            styledComponent = styled(cp.component) `
+            styledComponent = styled(component) `
         background-color: transparent;
         color: ${color};
         box-shadow: none;
@@ -111,14 +124,14 @@ function createStyleByType(cp) {
             break;
         }
         case Type.round: {
-            styledComponent = styled(cp.component) `
+            styledComponent = styled(component) `
         border-radius: 20px;
         padding: 12px 23px;
       `;
             break;
         }
         case Type.circle: {
-            styledComponent = styled(cp.component) `
+            styledComponent = styled(component) `
         border-radius: 50%;
         padding: 0px;
         width: 40px;
@@ -130,83 +143,62 @@ function createStyleByType(cp) {
         }
         case Type.contained:
         default: {
-            styledComponent = styled(cp.component) ``;
+            styledComponent = styled(component) ``;
             break;
         }
     }
-    return {
-        component: styledComponent,
-        props: cp.props
-    };
+    return styledComponent;
 }
-function createStyleBySize(cp) {
-    switch (cp.props.size) {
+function createStyleBySize(component, props) {
+    switch (props.size) {
         case Size.small: {
-            return {
-                component: styled(cp.component) `
-          font-size: 12px;
-          padding: ${cp.props.type === Type.circle ? "0px" : "1px 6px"};
-          border-radius: 3px;
-        `,
-                props: cp.props
-            };
+            return styled(component) `
+        font-size: 12px;
+        padding: ${props.type === Type.circle ? "0px" : "1px 6px"};
+        border-radius: 3px;
+      `;
         }
         case Size.medium:
         default: {
-            return {
-                component: styled(cp.component) `
-          font-size: 12px;
-          padding: ${cp.props.type === Type.circle ? "0px" : "5px 15px"};
-        `,
-                props: cp.props
-            };
+            return styled(component) `
+        font-size: 12px;
+        padding: ${props.type === Type.circle ? "0px" : "5px 15px"};
+      `;
         }
         case Size.large: {
-            return {
-                component: styled(cp.component) `
-          font-size: 14px;
-          padding: ${cp.props.type === Type.circle ? "0px" : "6px 15px"};
-        `,
-                props: cp.props
-            };
+            return styled(component) `
+        font-size: 14px;
+        padding: ${props.type === Type.circle ? "0px" : "6px 15px"};
+      `;
         }
     }
 }
-function createStyleByStatus(cp) {
-    const { color } = getColorByColor(cp.props.color);
-    switch (cp.props.status) {
+function createStyleByStatus(component, props) {
+    const { color } = getColorByColor(props.color);
+    switch (props.status) {
         case Status.disabled: {
-            return {
-                component: styled(cp.component) `
-          /* pointer-events: none; */
-          /* 阻止点击事件，但是会让 cursor 也失效 */
-          cursor: not-allowed;
-          opacity: 0.6;
-          :hover {
-            background-color: ${color};
-          }
-        `,
-                props: cp.props
-            };
+            return styled(component) `
+        /* pointer-events: none; */
+        /* 阻止点击事件，但是会让 cursor 也失效 */
+        cursor: not-allowed;
+        opacity: 0.6;
+        :hover {
+          background-color: ${color};
+        }
+      `;
         }
         case Status.loading: {
-            return {
-                component: styled(cp.component) `
-          cursor: default;
-          opacity: 0.6;
-          :hover {
-            background-color: ${color};
-          }
-        `,
-                props: cp.props
-            };
+            return styled(component) `
+        cursor: default;
+        opacity: 0.6;
+        :hover {
+          background-color: ${color};
+        }
+      `;
         }
         case Status.default:
         default: {
-            return {
-                component: cp.component,
-                props: cp.props
-            };
+            return component;
         }
     }
 }
@@ -231,28 +223,26 @@ function createBasicStyle() {
   `;
 }
 function getColorByColor(color) {
-    let _color, hoverColor;
     switch (color) {
         case Color.primary: {
-            _color = "#5698c3"; // 晴蓝
-            hoverColor = "#2177b8"; // 虹蓝
-            break;
+            return {
+                color: "#5698c3",
+                hoverColor: "#2177b8" // 虹蓝
+            };
         }
         case Color.secondary: {
-            _color = "#f07c82"; // 香叶红
-            hoverColor = "#c04851"; // 玉红
-            break;
+            return {
+                color: "#f07c82",
+                hoverColor: "#c04851" // 玉红
+            };
         }
         case Color.default:
         default: {
-            _color = "#c0c4c3"; // 月影白
-            hoverColor = "#a4aca7"; // 冰山蓝
-            break;
+            return {
+                color: "#c0c4c3",
+                hoverColor: "#a4aca7" // 冰山蓝
+            };
         }
     }
-    return {
-        color: _color,
-        hoverColor
-    };
 }
 export default Button;
