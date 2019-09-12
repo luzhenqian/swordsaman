@@ -1,8 +1,7 @@
 import React from "react";
-import styled, { AnyStyledComponent } from "styled-components";
+import styled, { AnyStyledComponent, keyframes } from "styled-components";
 import * as R from "ramda";
 import Icon from "../Icon";
-import { animation } from "polished";
 
 export enum Color {
   default = "default",
@@ -59,7 +58,9 @@ class Button extends React.Component<Props, any> {
     super(props);
   }
   clickHandler(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.props.onClick(e);
+    if (this.props.status === Status.default) {
+      this.props.onClick(e);
+    }
   }
   render() {
     const createStyle = R.pipe(
@@ -69,34 +70,26 @@ class Button extends React.Component<Props, any> {
       R.curry(createStyleByStatus)(R.__, this.props)
     );
     const Button = createStyle(createBasicStyle());
-    // 设置动画不管用
-    const Rotate = styled.span`
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
+    const rotate = keyframes`
+      from {
+        transform: rotate(0deg);
       }
-      animation: spin 1s linear infinite;
-      /* ${animation(["spin", "1s", "linear", "infinite"])} */
+      to {
+        transform: rotate(360deg);
+      }
     `;
+    const Rotate = styled.span`
+      display: inline-block;
+      animation: ${rotate} 2s linear infinite;
+    `;
+
     return (
-      <Button
-        onClick={
-          this.props.status === Status.default
-            ? this.clickHandler.bind(this)
-            : null
-        }
-      >
+      <Button onClick={this.clickHandler.bind(this)}>
         {this.props.status === Status.loading ? (
           <Rotate>
             <Icon icon="spinner" />
           </Rotate>
-        ) : (
-          ""
-        )}
+        ) : null}
         {this.props.children}
       </Button>
     );
@@ -109,24 +102,22 @@ function createStyleByColor(
   props: Props
 ): AnyStyledComponent {
   const { color, hoverColor } = getColorByColor(props.color);
-  const _component = styled(component)`
+  return styled(component)`
     background-color: ${color};
     :hover {
       background-color: ${hoverColor};
     }
   `;
-  return _component;
 }
 
 function createStyleByType(
   component: AnyStyledComponent,
   props: Props
 ): AnyStyledComponent {
-  let styledComponent: any;
   const { color, hoverColor } = getColorByColor(props.color);
   switch (props.type) {
     case Type.text: {
-      styledComponent = styled(component)`
+      return styled(component)`
         background-color: transparent;
         border: 0;
         box-shadow: none;
@@ -135,10 +126,9 @@ function createStyleByType(
           background-color: ${color};
         }
       `;
-      break;
     }
     case Type.outlined: {
-      styledComponent = styled(component)`
+      return styled(component)`
         background-color: transparent;
         border: 1px solid ${color};
         box-shadow: none;
@@ -147,10 +137,9 @@ function createStyleByType(
           background-color: ${color};
         }
       `;
-      break;
     }
     case Type.ghost: {
-      styledComponent = styled(component)`
+      return styled(component)`
         background-color: transparent;
         color: ${color};
         box-shadow: none;
@@ -161,17 +150,15 @@ function createStyleByType(
           background-color: rgba(0, 0, 0, 0.1);
         }
       `;
-      break;
     }
     case Type.round: {
-      styledComponent = styled(component)`
+      return styled(component)`
         border-radius: 20px;
         padding: 12px 23px;
       `;
-      break;
     }
     case Type.circle: {
-      styledComponent = styled(component)`
+      return styled(component)`
         border-radius: 50%;
         padding: 0px;
         width: 40px;
@@ -179,15 +166,12 @@ function createStyleByType(
         font-size: 12px;
         overflow: hidden;
       `;
-      break;
     }
     case Type.contained:
     default: {
-      styledComponent = styled(component)``;
-      break;
+      return styled(component)``;
     }
   }
-  return styledComponent;
 }
 
 function createStyleBySize(

@@ -16,14 +16,17 @@ interface IconProps {
   children: React.ReactNode;
   icon: IconProp;
 }
+
 class Icon extends React.Component<IconProps, any> {
   static defaultProps = {
     children: null,
     icon: "coffee"
   };
+
   render() {
     const Icon = styled(FontAwesomeIcon)``;
     return <Icon icon={this.props.icon} />;
   }
 }
+
 export default Icon;

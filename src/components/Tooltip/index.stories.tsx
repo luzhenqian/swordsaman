@@ -2,11 +2,9 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import Tooltip, { Placement } from "./index";
 import MarkdownText from "./readme.md";
-import { withKnobs, text } from "@storybook/addon-knobs";
+import Button from "../Button";
 
 const stories = storiesOf("Tooltip", module);
-
-stories.addDecorator(withKnobs);
 
 stories
   // 装饰器，仅装饰当前组件，也可以在configure中装饰全局
@@ -16,44 +14,73 @@ stories
   .add(
     "tooltip",
     () => {
-      const title = text(
-        "title",
-        `因强大而简单。
-      为你带来深色模式、受专业用户启发的各种功能、三款新 app，以及重新设计的 Mac App Store。`
-      );
-      const placement = text("placement", Placement.left);
       return (
         <>
           <Tooltip
             style={{ marginTop: "100px" }}
-            title={title}
-            placement={placement as Placement}
-            onOpen={() => {
-              console.log("open !");
-            }}
-            onClose={() => {
-              console.log("close!");
-            }}
+            title="左上角提示文字"
+            placement={Placement["top-start"]}
           >
-            macOS Mojave
+            <Button>左上</Button>
+          </Tooltip>
+
+          <Tooltip
+            style={{ marginTop: "100px" }}
+            title="上边提示文字"
+            placement={Placement["top"]}
+          >
+            <Button>上边</Button>
+          </Tooltip>
+
+          <Tooltip
+            style={{ marginTop: "100px" }}
+            title="右上角提示文字"
+            placement={Placement["top-end"]}
+          >
+            <Button>右上</Button>
           </Tooltip>
 
           <div>
             <Tooltip
               style={{ marginTop: "100px" }}
-              title="left"
+              title="左边提示文字"
               placement={Placement.left}
             >
-              left
+              <Button>左</Button>
+            </Tooltip>
+
+            <Tooltip
+              style={{ marginTop: "100px" }}
+              title="右边提示文字"
+              placement={Placement.right}
+            >
+              <Button>右</Button>
             </Tooltip>
           </div>
+
           <div>
             <Tooltip
               style={{ marginTop: "100px" }}
-              title="right"
-              placement={Placement.right}
+              title="左下提示文字"
+              placement={Placement["bottom-start"]}
             >
-              right
+              <Button>左下</Button>
+            </Tooltip>
+
+            <Tooltip
+              style={{ marginTop: "100px" }}
+              title="下边提示文字"
+              placement={Placement.bottom}
+            >
+              <Button>下</Button>
+            </Tooltip>
+
+            <Tooltip
+              style={{ marginTop: "100px" }}
+              title="右下提示文字"
+              placement={Placement["bottom-end"]}
+            >
+              <Button>右下</Button>
             </Tooltip>
           </div>
         </>

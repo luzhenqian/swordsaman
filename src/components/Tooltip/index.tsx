@@ -36,7 +36,7 @@ class Tooltip extends Component<ITooltipProps, any> {
     this.containerRef = React.createRef();
     this.tooltipPopperRef = React.createRef();
     this.state = {
-      style: { display: "none", opacity: 0 },
+      style: { display: "block", opacity: 0, pointerEvents: "none" },
       wh: {
         width: "0",
         height: "0"
@@ -49,7 +49,13 @@ class Tooltip extends Component<ITooltipProps, any> {
   }
   showTooltip = () => {
     this.setState({ style: { display: "block", opacity: 1 } });
-    this.setStyleProperty();
+    if (this.tooltipPopperRef.current !== null) {
+      if (
+        this.tooltipPopperRef.current.offsetWidth !== 0 &&
+        this.tooltipPopperRef.current.offsetHeight !== 0
+      )
+        this.setStyleProperty();
+    }
     if (this.props.onOpen) {
       this.props.onOpen();
     }
@@ -77,11 +83,13 @@ class Tooltip extends Component<ITooltipProps, any> {
         const centerLeft = `${this.containerRef.current.offsetLeft +
           this.containerRef.current.offsetWidth / 2 -
           this.state.wh.width / 2}px`;
-        const endLeft = `${this.containerRef.current.offsetLeft +
-          this.containerRef.current.offsetWidth}px`;
+        const endLeft = `${this.containerRef.current.offsetLeft -
+          (this.tooltipPopperRef.current.offsetWidth -
+            this.containerRef.current.offsetWidth)}px`;
         const rightLeft = `${this.containerRef.current.offsetLeft +
           this.containerRef.current.offsetWidth +
           10}px`;
+
         switch (this.props.placement) {
           case Placement.bottom: {
             this.setState({
@@ -202,7 +210,7 @@ class Tooltip extends Component<ITooltipProps, any> {
     }
   };
   componentDidMount() {
-    // FIXME: 无法通过DidMount获取元素
+    // FIXME: 无法通过DidMount获取元素宽高
     this.loadWH();
   }
   componentDidUpdate() {
@@ -248,6 +256,7 @@ class Tooltip extends Component<ITooltipProps, any> {
         transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     `;
     return (
+      // FIXME: 鼠标移动过快时，会导致事件冲突，onMouseLeave 事件不能被正确触发
       <Container
         onMouseEnter={this.showTooltip}
         onMouseLeave={this.hideTooltip}

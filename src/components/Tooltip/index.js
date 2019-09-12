@@ -20,7 +20,11 @@ class Tooltip extends Component {
         super(props);
         this.showTooltip = () => {
             this.setState({ style: { display: "block", opacity: 1 } });
-            this.setStyleProperty();
+            if (this.tooltipPopperRef.current !== null) {
+                if (this.tooltipPopperRef.current.offsetWidth !== 0 &&
+                    this.tooltipPopperRef.current.offsetHeight !== 0)
+                    this.setStyleProperty();
+            }
             if (this.props.onOpen) {
                 this.props.onOpen();
             }
@@ -47,8 +51,9 @@ class Tooltip extends Component {
                     const centerLeft = `${this.containerRef.current.offsetLeft +
                         this.containerRef.current.offsetWidth / 2 -
                         this.state.wh.width / 2}px`;
-                    const endLeft = `${this.containerRef.current.offsetLeft +
-                        this.containerRef.current.offsetWidth}px`;
+                    const endLeft = `${this.containerRef.current.offsetLeft -
+                        (this.tooltipPopperRef.current.offsetWidth -
+                            this.containerRef.current.offsetWidth)}px`;
                     const rightLeft = `${this.containerRef.current.offsetLeft +
                         this.containerRef.current.offsetWidth +
                         10}px`;
@@ -190,7 +195,7 @@ class Tooltip extends Component {
         this.containerRef = React.createRef();
         this.tooltipPopperRef = React.createRef();
         this.state = {
-            style: { display: "none", opacity: 0 },
+            style: { display: "block", opacity: 0, pointerEvents: "none" },
             wh: {
                 width: "0",
                 height: "0"
@@ -202,7 +207,7 @@ class Tooltip extends Component {
         };
     }
     componentDidMount() {
-        // FIXME: 无法通过DidMount获取元素
+        // FIXME: 无法通过DidMount获取元素宽高
         this.loadWH();
     }
     componentDidUpdate() {
@@ -229,7 +234,9 @@ class Tooltip extends Component {
       transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
         transform 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     `;
-        return (React.createElement(Container, { onMouseEnter: this.showTooltip, onMouseLeave: this.hideTooltip, ref: this.containerRef, style: Object.assign({}, this.props.style) },
+        return (
+        // FIXME: 鼠标移动过快时，会导致事件冲突，onMouseLeave 事件不能被正确触发
+        React.createElement(Container, { onMouseEnter: this.showTooltip, onMouseLeave: this.hideTooltip, ref: this.containerRef, style: Object.assign({}, this.props.style) },
             this.props.children,
             React.createElement(TooltipPopper, { ref: this.tooltipPopperRef, style: Object.assign({}, this.state.style) }, this.props.title)));
     }

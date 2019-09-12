@@ -1,10 +1,11 @@
-const Theme = {
+import * as R from "ramda";
+const _Theme = {
     colorPrimary: "#409EFF",
     // Functional Color 功能颜色
     success: "#67C23A",
     warning: "",
     danger: "",
-    info: "",
+    info: "red",
     // Font Color 字体颜色
     textPrimary: "",
     textRegular: "",
@@ -20,4 +21,11 @@ const Theme = {
     black: "",
     backgroundColorBase: "" // 基础背景色
 };
-export default Theme;
+const Theme = {
+    _theme: _Theme
+};
+function merge(theme) {
+    Theme._theme = R.merge(_Theme, theme);
+}
+export { merge };
+export default Theme._theme;

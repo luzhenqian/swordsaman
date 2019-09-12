@@ -1,8 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import * as R from "ramda";
 import Icon from "../Icon";
-import { animation } from "polished";
 export var Color;
 (function (Color) {
     Color["default"] = "default";
@@ -37,29 +36,28 @@ class Button extends React.Component {
         super(props);
     }
     clickHandler(e) {
-        this.props.onClick(e);
+        if (this.props.status === Status.default) {
+            this.props.onClick(e);
+        }
     }
     render() {
         const createStyle = R.pipe(R.curry(createStyleByColor)(R.__, this.props), R.curry(createStyleByType)(R.__, this.props), R.curry(createStyleBySize)(R.__, this.props), R.curry(createStyleByStatus)(R.__, this.props));
         const Button = createStyle(createBasicStyle());
-        // 设置动画不管用
-        const Rotate = styled.span `
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
+        const rotate = keyframes `
+      from {
+        transform: rotate(0deg);
       }
-      animation: spin 1s linear infinite;
-      /* ${animation(["spin", "1s", "linear", "infinite"])} */
+      to {
+        transform: rotate(360deg);
+      }
     `;
-        return (React.createElement(Button, { onClick: this.props.status === Status.default
-                ? this.clickHandler.bind(this)
-                : null },
+        const Rotate = styled.span `
+      display: inline-block;
+      animation: ${rotate} 2s linear infinite;
+    `;
+        return (React.createElement(Button, { onClick: this.clickHandler.bind(this) },
             this.props.status === Status.loading ? (React.createElement(Rotate, null,
-                React.createElement(Icon, { icon: "spinner" }))) : (""),
+                React.createElement(Icon, { icon: "spinner" }))) : null,
             this.props.children));
     }
 }
@@ -73,20 +71,18 @@ Button.defaultProps = {
 // FIXME:函数式的原则是保持纯函数，直接修改component是有问题的。
 function createStyleByColor(component, props) {
     const { color, hoverColor } = getColorByColor(props.color);
-    const _component = styled(component) `
+    return styled(component) `
     background-color: ${color};
     :hover {
       background-color: ${hoverColor};
     }
   `;
-    return _component;
 }
 function createStyleByType(component, props) {
-    let styledComponent;
     const { color, hoverColor } = getColorByColor(props.color);
     switch (props.type) {
         case Type.text: {
-            styledComponent = styled(component) `
+            return styled(component) `
         background-color: transparent;
         border: 0;
         box-shadow: none;
@@ -95,10 +91,9 @@ function createStyleByType(component, props) {
           background-color: ${color};
         }
       `;
-            break;
         }
         case Type.outlined: {
-            styledComponent = styled(component) `
+            return styled(component) `
         background-color: transparent;
         border: 1px solid ${color};
         box-shadow: none;
@@ -107,10 +102,9 @@ function createStyleByType(component, props) {
           background-color: ${color};
         }
       `;
-            break;
         }
         case Type.ghost: {
-            styledComponent = styled(component) `
+            return styled(component) `
         background-color: transparent;
         color: ${color};
         box-shadow: none;
@@ -121,17 +115,15 @@ function createStyleByType(component, props) {
           background-color: rgba(0, 0, 0, 0.1);
         }
       `;
-            break;
         }
         case Type.round: {
-            styledComponent = styled(component) `
+            return styled(component) `
         border-radius: 20px;
         padding: 12px 23px;
       `;
-            break;
         }
         case Type.circle: {
-            styledComponent = styled(component) `
+            return styled(component) `
         border-radius: 50%;
         padding: 0px;
         width: 40px;
@@ -139,15 +131,12 @@ function createStyleByType(component, props) {
         font-size: 12px;
         overflow: hidden;
       `;
-            break;
         }
         case Type.contained:
         default: {
-            styledComponent = styled(component) ``;
-            break;
+            return styled(component) ``;
         }
     }
-    return styledComponent;
 }
 function createStyleBySize(component, props) {
     switch (props.size) {
