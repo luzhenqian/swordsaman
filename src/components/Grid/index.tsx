@@ -13,7 +13,6 @@ class Grid extends React.Component<IGridProps, any> {
     item: false
   };
   render() {
-    console.log("children:", this.props.children);
     return <div>{this.props.children}</div>;
   }
 }

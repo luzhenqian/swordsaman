@@ -17,7 +17,7 @@ stories
       return (
         <>
           <Tooltip
-            style={{ marginTop: "100px" }}
+            style={{ marginTop: "30px" }}
             title="左上角提示文字"
             placement={Placement["top-start"]}
           >
@@ -25,7 +25,7 @@ stories
           </Tooltip>
 
           <Tooltip
-            style={{ marginTop: "100px" }}
+            style={{ marginTop: "30px" }}
             title="上边提示文字"
             placement={Placement["top"]}
           >
@@ -33,7 +33,7 @@ stories
           </Tooltip>
 
           <Tooltip
-            style={{ marginTop: "100px" }}
+            style={{ marginTop: "30px" }}
             title="右上角提示文字"
             placement={Placement["top-end"]}
           >
@@ -42,7 +42,25 @@ stories
 
           <div>
             <Tooltip
-              style={{ marginTop: "100px" }}
+              style={{ marginTop: "30px" }}
+              title="左边提示文字"
+              placement={Placement["left-start"]}
+            >
+              <Button>左上</Button>
+            </Tooltip>
+
+            <Tooltip
+              style={{ marginTop: "30px" }}
+              title="右边提示文字"
+              placement={Placement["right-start"]}
+            >
+              <Button>右上</Button>
+            </Tooltip>
+          </div>
+
+          <div>
+            <Tooltip
+              style={{ marginTop: "30px" }}
               title="左边提示文字"
               placement={Placement.left}
             >
@@ -50,7 +68,7 @@ stories
             </Tooltip>
 
             <Tooltip
-              style={{ marginTop: "100px" }}
+              style={{ marginTop: "30px" }}
               title="右边提示文字"
               placement={Placement.right}
             >
@@ -60,7 +78,25 @@ stories
 
           <div>
             <Tooltip
-              style={{ marginTop: "100px" }}
+              style={{ marginTop: "30px" }}
+              title="左边提示文字"
+              placement={Placement["left-end"]}
+            >
+              <Button>左下</Button>
+            </Tooltip>
+
+            <Tooltip
+              style={{ marginTop: "30px" }}
+              title="右边提示文字"
+              placement={Placement["right-end"]}
+            >
+              <Button>右下</Button>
+            </Tooltip>
+          </div>
+
+          <div>
+            <Tooltip
+              style={{ marginTop: "30px" }}
               title="左下提示文字"
               placement={Placement["bottom-start"]}
             >
@@ -68,7 +104,7 @@ stories
             </Tooltip>
 
             <Tooltip
-              style={{ marginTop: "100px" }}
+              style={{ marginTop: "30px" }}
               title="下边提示文字"
               placement={Placement.bottom}
             >
@@ -76,7 +112,7 @@ stories
             </Tooltip>
 
             <Tooltip
-              style={{ marginTop: "100px" }}
+              style={{ marginTop: "30px" }}
               title="右下提示文字"
               placement={Placement["bottom-end"]}
             >

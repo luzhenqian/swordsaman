@@ -18,7 +18,7 @@ export enum Placement {
 
 interface ITooltipProps {
   children: any;
-  title: ReactNode; // FIXME:或者是函数
+  title: ReactNode | Function;
   style?: object; // 覆盖或扩展样式
   onOpen?: Function; // 在提示框显示时触发
   onClose?: Function; // 在提示框消失时触发
@@ -48,17 +48,19 @@ class Tooltip extends Component<ITooltipProps, any> {
     };
   }
   showTooltip = () => {
-    this.setState({ style: { display: "block", opacity: 1 } });
-    if (this.tooltipPopperRef.current !== null) {
-      if (
-        this.tooltipPopperRef.current.offsetWidth !== 0 &&
-        this.tooltipPopperRef.current.offsetHeight !== 0
-      )
-        this.setStyleProperty();
-    }
-    if (this.props.onOpen) {
-      this.props.onOpen();
-    }
+    setTimeout(() => {
+      this.setState({ style: { display: "block", opacity: 1 } });
+      if (this.tooltipPopperRef.current !== null) {
+        if (
+          this.tooltipPopperRef.current.offsetWidth !== 0 &&
+          this.tooltipPopperRef.current.offsetHeight !== 0
+        )
+          this.setStyleProperty();
+      }
+      if (this.props.onOpen) {
+        this.props.onOpen();
+      }
+    }, 200);
   };
   setStyleProperty = () => {
     if (this.containerRef.current !== null) {
@@ -71,7 +73,7 @@ class Tooltip extends Component<ITooltipProps, any> {
           this.containerRef.current.offsetHeight / 2 -
           this.state.wh.height / 2}px`;
         const endTop = `${this.containerRef.current.offsetTop +
-          this.containerRef.current.offsetHeight}px`;
+          this.containerRef.current.offsetHeight / 2}px`;
         const bottomTop = `${this.containerRef.current.offsetTop +
           this.containerRef.current.offsetHeight +
           10}px`;
@@ -204,14 +206,17 @@ class Tooltip extends Component<ITooltipProps, any> {
     }
   };
   hideTooltip = () => {
-    this.setState({ style: { display: "none", opacity: 0 } });
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
+    setTimeout(() => {
+      this.setState({ style: { display: "none", opacity: 0 } });
+      if (this.props.onClose) {
+        this.props.onClose();
+      }
+    }, 200);
   };
   componentDidMount() {
     // FIXME: 无法通过DidMount获取元素宽高
     this.loadWH();
+    this.setStyleProperty();
   }
   componentDidUpdate() {
     this.loadWH();
@@ -269,7 +274,9 @@ class Tooltip extends Component<ITooltipProps, any> {
           ref={this.tooltipPopperRef}
           style={{ ...this.state.style }}
         >
-          {this.props.title}
+          {typeof this.props.title === "function"
+            ? this.props.title()
+            : this.props.title}
         </TooltipPopper>
       </Container>
     );

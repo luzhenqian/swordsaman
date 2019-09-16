@@ -19,15 +19,17 @@ class Tooltip extends Component {
     constructor(props) {
         super(props);
         this.showTooltip = () => {
-            this.setState({ style: { display: "block", opacity: 1 } });
-            if (this.tooltipPopperRef.current !== null) {
-                if (this.tooltipPopperRef.current.offsetWidth !== 0 &&
-                    this.tooltipPopperRef.current.offsetHeight !== 0)
-                    this.setStyleProperty();
-            }
-            if (this.props.onOpen) {
-                this.props.onOpen();
-            }
+            setTimeout(() => {
+                this.setState({ style: { display: "block", opacity: 1 } });
+                if (this.tooltipPopperRef.current !== null) {
+                    if (this.tooltipPopperRef.current.offsetWidth !== 0 &&
+                        this.tooltipPopperRef.current.offsetHeight !== 0)
+                        this.setStyleProperty();
+                }
+                if (this.props.onOpen) {
+                    this.props.onOpen();
+                }
+            }, 200);
         };
         this.setStyleProperty = () => {
             if (this.containerRef.current !== null) {
@@ -40,7 +42,7 @@ class Tooltip extends Component {
                         this.containerRef.current.offsetHeight / 2 -
                         this.state.wh.height / 2}px`;
                     const endTop = `${this.containerRef.current.offsetTop +
-                        this.containerRef.current.offsetHeight}px`;
+                        this.containerRef.current.offsetHeight / 2}px`;
                     const bottomTop = `${this.containerRef.current.offsetTop +
                         this.containerRef.current.offsetHeight +
                         10}px`;
@@ -171,10 +173,12 @@ class Tooltip extends Component {
             }
         };
         this.hideTooltip = () => {
-            this.setState({ style: { display: "none", opacity: 0 } });
-            if (this.props.onClose) {
-                this.props.onClose();
-            }
+            setTimeout(() => {
+                this.setState({ style: { display: "none", opacity: 0 } });
+                if (this.props.onClose) {
+                    this.props.onClose();
+                }
+            }, 200);
         };
         this.loadWH = () => {
             // FIXME:更新状态后，无法获取到宽度
@@ -209,6 +213,7 @@ class Tooltip extends Component {
     componentDidMount() {
         // FIXME: 无法通过DidMount获取元素宽高
         this.loadWH();
+        this.setStyleProperty();
     }
     componentDidUpdate() {
         this.loadWH();
@@ -238,7 +243,9 @@ class Tooltip extends Component {
         // FIXME: 鼠标移动过快时，会导致事件冲突，onMouseLeave 事件不能被正确触发
         React.createElement(Container, { onMouseEnter: this.showTooltip, onMouseLeave: this.hideTooltip, ref: this.containerRef, style: Object.assign({}, this.props.style) },
             this.props.children,
-            React.createElement(TooltipPopper, { ref: this.tooltipPopperRef, style: Object.assign({}, this.state.style) }, this.props.title)));
+            React.createElement(TooltipPopper, { ref: this.tooltipPopperRef, style: Object.assign({}, this.state.style) }, typeof this.props.title === "function"
+                ? this.props.title()
+                : this.props.title)));
     }
 }
 Tooltip.defaultProps = {
