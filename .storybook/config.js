@@ -1,5 +1,9 @@
-import { configure, addParameters } from "@storybook/react";
+import { configure, addParameters, addDecorator } from "@storybook/react";
+import { withInfo } from "@storybook/addon-info";
 import Theme from "./theme";
+
+addDecorator(withInfo);
+
 // 全局配置 http://qingisnotchina.blogspot.com/
 addParameters({
   options: {

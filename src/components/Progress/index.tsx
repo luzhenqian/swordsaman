@@ -3,11 +3,11 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 
 interface IProgressProps {
-  value: number; // 进度条最大值
+  value: number; // 进度条最大值，默认 100
   percent: number; // 当前百分比
   color: string; // 正常状态进度条颜色
   failedColor: string; // 失败状态进度条颜色
-  duration: number; // 进度条消失延迟
+  duration: number; // 进度条消失延迟，毫秒
 }
 
 class Progress extends Component<IProgressProps, any> {
@@ -20,27 +20,27 @@ class Progress extends Component<IProgressProps, any> {
   };
 
   private progressBarRef = React.createRef<HTMLDivElement>();
-  private progressBarInnerRef = React.createRef<HTMLDivElement>();
-  private body = window.document.body;
+  private progressInnerBarRef = React.createRef<HTMLDivElement>();
+  private container = document.createElement("div");
 
   shouldComponentUpdate(newProps: IProgressProps) {
     if (
       this.progressBarRef.current !== null &&
-      this.progressBarInnerRef.current !== null
+      this.progressInnerBarRef.current !== null
     ) {
-      this.progressBarInnerRef.current.style.width = `
-        ${
-          newProps.percent < 0
-            ? "100%"
-            : `${(newProps.percent / newProps.value) * 100}%`
-        }
-      `;
-      this.progressBarInnerRef.current.style.backgroundColor =
+      this.progressInnerBarRef.current.style.width = `${(newProps.percent /
+        newProps.value) *
+        100}%`;
+      this.progressInnerBarRef.current.style.backgroundColor =
         newProps.percent < 0 ? newProps.failedColor : newProps.color;
       this.progressBarRef.current.style.display = "block";
-      if (newProps.percent / newProps.value > 1 || newProps.percent < 0) {
+      if (newProps.percent / newProps.value >= 1 || newProps.percent < 0) {
         setTimeout(() => {
-          if (this.progressBarRef.current !== null) {
+          if (
+            this.progressInnerBarRef.current !== null &&
+            this.progressBarRef.current !== null
+          ) {
+            this.progressInnerBarRef.current.style.width = "0%";
             this.progressBarRef.current.style.display = "none";
           }
         }, newProps.duration);
@@ -53,11 +53,15 @@ class Progress extends Component<IProgressProps, any> {
 
   componentDidMount() {
     if (
-      this.props.percent / this.props.value > 1 ||
-      (this.props.percent < 0 && this.progressBarInnerRef.current !== null)
+      this.props.percent / this.props.value >= 1 ||
+      (this.props.percent < 0 && this.progressInnerBarRef.current !== null)
     ) {
       setTimeout(() => {
-        if (this.progressBarRef.current !== null) {
+        if (
+          this.progressInnerBarRef.current !== null &&
+          this.progressBarRef.current !== null
+        ) {
+          this.progressInnerBarRef.current.style.width = "0%";
           this.progressBarRef.current.style.display = "none";
         }
       }, this.props.duration);
@@ -65,13 +69,11 @@ class Progress extends Component<IProgressProps, any> {
   }
 
   componentWillUnmount() {
-    // FIXME: 这里经常报以下错误，原因未知：
-    // Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
-    if (this.progressBarRef.current !== null)
-      this.body.removeChild(this.progressBarRef.current);
+    if (this.container !== null) this.container.remove();
   }
 
   render() {
+    window.document.body.appendChild(this.container);
     const ProgressBar = styled.div`
       position: fixed;
       top: 0;
@@ -81,7 +83,7 @@ class Progress extends Component<IProgressProps, any> {
       width: 100%;
       height: 2px;
     `;
-    const ProgressBarInner = styled.div`
+    const ProgressInnerBar = styled.div`
       height: 100%;
       transition: width 0.2s linear;
       width: ${this.props.percent < 0
@@ -93,9 +95,9 @@ class Progress extends Component<IProgressProps, any> {
     `;
     return createPortal(
       <ProgressBar ref={this.progressBarRef}>
-        <ProgressBarInner ref={this.progressBarInnerRef} />
+        <ProgressInnerBar ref={this.progressInnerBarRef} />
       </ProgressBar>,
-      this.body
+      this.container
     );
   }
 }

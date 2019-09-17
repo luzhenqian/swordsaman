@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import Grid from "./index";
 
-storiesOf("gird", module).add("grid", () => {
+storiesOf("布局", module).add("grid", () => {
   return (
     <>
       <Grid>

@@ -5,23 +5,23 @@ class Progress extends Component {
     constructor() {
         super(...arguments);
         this.progressBarRef = React.createRef();
-        this.progressBarInnerRef = React.createRef();
-        this.body = window.document.body;
+        this.progressInnerBarRef = React.createRef();
+        this.container = document.createElement("div");
     }
     shouldComponentUpdate(newProps) {
         if (this.progressBarRef.current !== null &&
-            this.progressBarInnerRef.current !== null) {
-            this.progressBarInnerRef.current.style.width = `
-        ${newProps.percent < 0
-                ? "100%"
-                : `${(newProps.percent / newProps.value) * 100}%`}
-      `;
-            this.progressBarInnerRef.current.style.backgroundColor =
+            this.progressInnerBarRef.current !== null) {
+            this.progressInnerBarRef.current.style.width = `${(newProps.percent /
+                newProps.value) *
+                100}%`;
+            this.progressInnerBarRef.current.style.backgroundColor =
                 newProps.percent < 0 ? newProps.failedColor : newProps.color;
             this.progressBarRef.current.style.display = "block";
-            if (newProps.percent / newProps.value > 1 || newProps.percent < 0) {
+            if (newProps.percent / newProps.value >= 1 || newProps.percent < 0) {
                 setTimeout(() => {
-                    if (this.progressBarRef.current !== null) {
+                    if (this.progressInnerBarRef.current !== null &&
+                        this.progressBarRef.current !== null) {
+                        this.progressInnerBarRef.current.style.width = "0%";
                         this.progressBarRef.current.style.display = "none";
                     }
                 }, newProps.duration);
@@ -33,22 +33,23 @@ class Progress extends Component {
         }
     }
     componentDidMount() {
-        if (this.props.percent / this.props.value > 1 ||
-            (this.props.percent < 0 && this.progressBarInnerRef.current !== null)) {
+        if (this.props.percent / this.props.value >= 1 ||
+            (this.props.percent < 0 && this.progressInnerBarRef.current !== null)) {
             setTimeout(() => {
-                if (this.progressBarRef.current !== null) {
+                if (this.progressInnerBarRef.current !== null &&
+                    this.progressBarRef.current !== null) {
+                    this.progressInnerBarRef.current.style.width = "0%";
                     this.progressBarRef.current.style.display = "none";
                 }
             }, this.props.duration);
         }
     }
     componentWillUnmount() {
-        // FIXME: 这里经常报以下错误，原因未知：
-        // Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
-        if (this.progressBarRef.current !== null)
-            this.body.removeChild(this.progressBarRef.current);
+        if (this.container !== null)
+            this.container.remove();
     }
     render() {
+        window.document.body.appendChild(this.container);
         const ProgressBar = styled.div `
       position: fixed;
       top: 0;
@@ -58,7 +59,7 @@ class Progress extends Component {
       width: 100%;
       height: 2px;
     `;
-        const ProgressBarInner = styled.div `
+        const ProgressInnerBar = styled.div `
       height: 100%;
       transition: width 0.2s linear;
       width: ${this.props.percent < 0
@@ -69,7 +70,7 @@ class Progress extends Component {
             : this.props.color};
     `;
         return createPortal(React.createElement(ProgressBar, { ref: this.progressBarRef },
-            React.createElement(ProgressBarInner, { ref: this.progressBarInnerRef })), this.body);
+            React.createElement(ProgressInnerBar, { ref: this.progressInnerBarRef })), this.container);
     }
 }
 Progress.defaultProps = {

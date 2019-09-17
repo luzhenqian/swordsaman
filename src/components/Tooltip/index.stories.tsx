@@ -4,7 +4,7 @@ import Tooltip, { Placement } from "./index";
 import MarkdownText from "./readme.md";
 import Button from "../Button";
 
-const stories = storiesOf("Tooltip", module);
+const stories = storiesOf("数据展示", module);
 
 stories
   // 装饰器，仅装饰当前组件，也可以在configure中装饰全局
@@ -12,7 +12,7 @@ stories
     <div style={{ textAlign: "center" }}>{storyFn()}</div>
   ))
   .add(
-    "tooltip",
+    "tooltip （文字提示）",
     () => {
       return (
         <>
