@@ -11,9 +11,7 @@ class Progress extends Component {
     shouldComponentUpdate(newProps) {
         if (this.progressBarRef.current !== null &&
             this.progressInnerBarRef.current !== null) {
-            this.progressInnerBarRef.current.style.width = `${(newProps.percent /
-                newProps.value) *
-                100}%`;
+            this.progressInnerBarRef.current.style.width = `${newProps.percent > 0 ? (newProps.percent / newProps.value) * 100 : 100}%`;
             this.progressInnerBarRef.current.style.backgroundColor =
                 newProps.percent < 0 ? newProps.failedColor : newProps.color;
             this.progressBarRef.current.style.display = "block";

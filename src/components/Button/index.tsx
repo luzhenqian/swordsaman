@@ -69,7 +69,7 @@ class Button extends React.Component<Props, any> {
       R.curry(createStyleBySize)(R.__, this.props),
       R.curry(createStyleByStatus)(R.__, this.props)
     );
-    const Button = createStyle(createBasicStyle());
+    const Button = createStyle(createBaseStyle());
     const rotate = keyframes`
       from {
         transform: rotate(0deg);
@@ -82,7 +82,6 @@ class Button extends React.Component<Props, any> {
       display: inline-block;
       animation: ${rotate} 2s linear infinite;
     `;
-
     return (
       <Button onClick={this.clickHandler.bind(this)}>
         {this.props.status === Status.loading ? (
@@ -103,8 +102,11 @@ function createStyleByColor(
 ): AnyStyledComponent {
   const { color, hoverColor } = getColorByColor(props.color);
   return styled(component)`
-    background-color: ${color};
+    background-color: ${hoverColor};
     :hover {
+      background-color: ${color};
+    }
+    :active {
       background-color: ${hoverColor};
     }
   `;
@@ -122,8 +124,13 @@ function createStyleByType(
         border: 0;
         box-shadow: none;
         color: ${hoverColor};
+        opacity: 0.8;
         :hover {
           background-color: ${color};
+          opacity: 0.9;
+        }
+        :active {
+          opacity: 1;
         }
       `;
     }
@@ -206,7 +213,7 @@ function createStyleByStatus(
   component: AnyStyledComponent,
   props: Props
 ): AnyStyledComponent {
-  const { color } = getColorByColor(props.color);
+  const { hoverColor } = getColorByColor(props.color);
   switch (props.status) {
     case Status.disabled: {
       return styled(component)`
@@ -215,7 +222,7 @@ function createStyleByStatus(
         cursor: not-allowed;
         opacity: 0.6;
         :hover {
-          background-color: ${color};
+          background-color: ${hoverColor};
         }
       `;
     }
@@ -224,7 +231,7 @@ function createStyleByStatus(
         cursor: default;
         opacity: 0.6;
         :hover {
-          background-color: ${color};
+          background-color: ${hoverColor};
         }
       `;
     }
@@ -235,7 +242,7 @@ function createStyleByStatus(
   }
 }
 
-function createBasicStyle(): AnyStyledComponent {
+function createBaseStyle(): AnyStyledComponent {
   return styled.button`
     box-sizing: border-box;
     margin: 8px;
@@ -244,6 +251,7 @@ function createBasicStyle(): AnyStyledComponent {
     border-radius: 4px;
     line-height: 1.5;
     color: #ffffff;
+    cursor: pointer;
     box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
       0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
     user-select: none;

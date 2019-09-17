@@ -2,11 +2,11 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import Grid from "./index";
 
-storiesOf("布局", module).add("grid", () => {
+storiesOf("Layout （布局）", module).add("Grid （栅格）", () => {
   return (
     <>
       <Grid>
-        <Grid>hi</Grid>
+        <Grid>还没有做哦。</Grid>
       </Grid>
     </>
   );

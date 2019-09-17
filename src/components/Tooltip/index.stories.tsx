@@ -4,7 +4,7 @@ import Tooltip, { Placement } from "./index";
 import MarkdownText from "./readme.md";
 import Button from "../Button";
 
-const stories = storiesOf("数据展示", module);
+const stories = storiesOf("Data Display （数据展示）", module);
 
 stories
   // 装饰器，仅装饰当前组件，也可以在configure中装饰全局
@@ -12,7 +12,7 @@ stories
     <div style={{ textAlign: "center" }}>{storyFn()}</div>
   ))
   .add(
-    "tooltip （文字提示）",
+    "Tooltip （文字提示）",
     () => {
       return (
         <>
@@ -43,7 +43,7 @@ stories
           <div>
             <Tooltip
               style={{ marginTop: "30px" }}
-              title="左边提示文字"
+              title="左上提示文字"
               placement={Placement["left-start"]}
             >
               <Button>左上</Button>
@@ -51,7 +51,7 @@ stories
 
             <Tooltip
               style={{ marginTop: "30px" }}
-              title="右边提示文字"
+              title="右上提示文字"
               placement={Placement["right-start"]}
             >
               <Button>右上</Button>
@@ -79,7 +79,7 @@ stories
           <div>
             <Tooltip
               style={{ marginTop: "30px" }}
-              title="左边提示文字"
+              title="左下提示文字"
               placement={Placement["left-end"]}
             >
               <Button>左下</Button>
@@ -87,7 +87,7 @@ stories
 
             <Tooltip
               style={{ marginTop: "30px" }}
-              title="右边提示文字"
+              title="右下提示文字"
               placement={Placement["right-end"]}
             >
               <Button>右下</Button>
@@ -123,6 +123,6 @@ stories
       );
     },
     {
-      notes: { markdown: MarkdownText }
+      notes: MarkdownText
     }
   );

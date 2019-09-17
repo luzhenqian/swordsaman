@@ -2,8 +2,8 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import Button, { Color, Type, Size, Status } from "./index";
 
-storiesOf("输入", module).add(
-  "button",
+storiesOf("Inputs （输入）", module).add(
+  "Button （按钮）",
   () => (
     <>
       <div>

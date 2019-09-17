@@ -1,11 +1,19 @@
 import { configure, addParameters, addDecorator } from "@storybook/react";
-import { withInfo } from "@storybook/addon-info";
+// import { withInfo } from "@storybook/addon-info";
 import Theme from "./theme";
 
-addDecorator(withInfo);
+// addDecorator(withInfo);
 
 // 全局配置 http://qingisnotchina.blogspot.com/
 addParameters({
+  // info: {
+  //   styles: stylesheet =>({
+  //     ...stylesheet,
+  //     title: {
+  //       backgroundColor: 'red'
+  //     }
+  //   })
+  // },
   options: {
     theme: Theme
   }
