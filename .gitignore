@@ -73,6 +73,7 @@ yarn-error.log
 
 storybook-static
 
-test
+# jest coverage files
+coverage
 
 *.temp

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import Theme from "../../styles/theme";
 
 interface IProgressProps {
   value: number; // 进度条最大值，默认 100
@@ -10,38 +11,38 @@ interface IProgressProps {
   duration: number; // 进度条消失延迟，毫秒
 }
 
-class Progress extends Component<IProgressProps, any> {
+class LoadingBar extends Component<IProgressProps, any> {
   static defaultProps = {
     value: 100,
     percent: 0,
-    color: "blue",
-    failedColor: "red",
+    color: Theme.getTheme().colorPrimary,
+    failedColor: Theme.getTheme().colorDanger,
     duration: 800
   };
 
-  private progressBarRef = React.createRef<HTMLDivElement>();
-  private progressInnerBarRef = React.createRef<HTMLDivElement>();
+  private LoadingBar = React.createRef<HTMLDivElement>();
+  private LoadingInnerBar = React.createRef<HTMLDivElement>();
   private container = document.createElement("div");
 
   shouldComponentUpdate(newProps: IProgressProps) {
     if (
-      this.progressBarRef.current !== null &&
-      this.progressInnerBarRef.current !== null
+      this.LoadingBar.current !== null &&
+      this.LoadingInnerBar.current !== null
     ) {
-      this.progressInnerBarRef.current.style.width = `${
-        newProps.percent > 0 ? (newProps.percent / newProps.value) * 100 : 100
+      this.LoadingInnerBar.current.style.width = `${
+        newProps.percent >= 0 ? (newProps.percent / newProps.value) * 100 : 100
       }%`;
-      this.progressInnerBarRef.current.style.backgroundColor =
+      this.LoadingInnerBar.current.style.backgroundColor =
         newProps.percent < 0 ? newProps.failedColor : newProps.color;
-      this.progressBarRef.current.style.display = "block";
+      this.LoadingBar.current.style.display = "block";
       if (newProps.percent / newProps.value >= 1 || newProps.percent < 0) {
         setTimeout(() => {
           if (
-            this.progressInnerBarRef.current !== null &&
-            this.progressBarRef.current !== null
+            this.LoadingInnerBar.current !== null &&
+            this.LoadingBar.current !== null
           ) {
-            this.progressInnerBarRef.current.style.width = "0%";
-            this.progressBarRef.current.style.display = "none";
+            this.LoadingInnerBar.current.style.width = "0%";
+            this.LoadingBar.current.style.display = "none";
           }
         }, newProps.duration);
       }
@@ -54,15 +55,15 @@ class Progress extends Component<IProgressProps, any> {
   componentDidMount() {
     if (
       this.props.percent / this.props.value >= 1 ||
-      (this.props.percent < 0 && this.progressInnerBarRef.current !== null)
+      (this.props.percent < 0 && this.LoadingInnerBar.current !== null)
     ) {
       setTimeout(() => {
         if (
-          this.progressInnerBarRef.current !== null &&
-          this.progressBarRef.current !== null
+          this.LoadingInnerBar.current !== null &&
+          this.LoadingBar.current !== null
         ) {
-          this.progressInnerBarRef.current.style.width = "0%";
-          this.progressBarRef.current.style.display = "none";
+          this.LoadingInnerBar.current.style.width = "0%";
+          this.LoadingBar.current.style.display = "none";
         }
       }, this.props.duration);
     }
@@ -74,7 +75,7 @@ class Progress extends Component<IProgressProps, any> {
 
   render() {
     window.document.body.appendChild(this.container);
-    const ProgressBar = styled.div`
+    const LoadingBar = styled.div`
       position: fixed;
       top: 0;
       left: 0;
@@ -83,7 +84,7 @@ class Progress extends Component<IProgressProps, any> {
       width: 100%;
       height: 2px;
     `;
-    const ProgressInnerBar = styled.div`
+    const LoadingInnerBar = styled.div`
       height: 100%;
       transition: width 0.2s linear;
       width: ${this.props.percent < 0
@@ -94,12 +95,12 @@ class Progress extends Component<IProgressProps, any> {
         : this.props.color};
     `;
     return createPortal(
-      <ProgressBar ref={this.progressBarRef}>
-        <ProgressInnerBar ref={this.progressInnerBarRef} />
-      </ProgressBar>,
+      <LoadingBar ref={this.LoadingBar}>
+        <LoadingInnerBar ref={this.LoadingInnerBar} />
+      </LoadingBar>,
       this.container
     );
   }
 }
 
-export default Progress;
+export default LoadingBar;
