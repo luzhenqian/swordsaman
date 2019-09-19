@@ -33,6 +33,8 @@ const ThemeIIEF = (function () {
         return theme;
     }
     // FIXME: 只有热更新后才能得到最新的设置，可以考虑按照Vue的思想，收集使用者，set时通知它们数据发生了变化
+    // 可以尝试使用 JavaScript 读取 css 变量，这样用户只需要在应用中添加一个css文件即可。但是兼容性并不好。
+    // 还有 React 的 context
     function setTheme(theme) {
         getInstance().setTheme(theme);
     }

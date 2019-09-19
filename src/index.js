@@ -9,3 +9,9 @@
 // `;
 export { default as Tooltip } from "./components/Tooltip";
 export { default as Button } from "./components/Button";
+export { default as LoadingBar } from "./components/LoadingBar";
+export { default as Icon } from "./components/Icon";
+export { default as Divider } from "./components/Divider";
+export { default as Card } from "./components/Card";
+export { Row, Col } from "./components/Grid";
+export { default as Theme } from "./styles/theme";
