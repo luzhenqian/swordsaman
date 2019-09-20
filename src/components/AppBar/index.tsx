@@ -1,8 +1,16 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 
-class AppBar extends Component {
+interface Props {
+  children: React.ReactNode;
+}
+
+class AppBar extends Component<Props, any> {
   render() {
-    return <div></div>;
+    const AppBar = styled.div`
+      position: fixed;
+    `;
+    return <AppBar>{this.props.children}</AppBar>;
   }
 }
 

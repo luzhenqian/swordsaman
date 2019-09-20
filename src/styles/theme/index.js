@@ -1,28 +1,62 @@
 const defaultTheme = {
-    colorPrimary: "#409EFF",
-    colorSuccess: "#67C23A",
-    colorWarning: "#E6A23C",
-    colorDanger: "#F56C6C",
-    colorInfo: "#909399",
-    colorTextPrimary: "#303133",
-    colorTextRegular: "#606266",
-    colorTextSecondary: "#909399",
-    colorTextPlaceholder: "#C0C4CC",
-    borderColorBase: "#DCDFE6",
-    borderColorLight: "#E4E7ED",
-    borderColorLighter: "#EBEEF5",
-    borderColorExtraLight: "#F2F6FC",
-    colorWhite: "#FFFFFF",
-    colorBlack: "#000000",
-    backgroundColorBase: "#F5F7FA"
+    colorPrimary: getPropertyValue("colorPrimary")
+        ? getPropertyValue("colorPrimary")
+        : "#409EFF",
+    colorSuccess: getPropertyValue("colorSuccess")
+        ? getPropertyValue("colorSuccess")
+        : "#67C23A",
+    colorWarning: getPropertyValue("colorWarning")
+        ? getPropertyValue("colorWarning")
+        : "#E6A23C",
+    colorDanger: getPropertyValue("colorDanger")
+        ? getPropertyValue("colorDanger")
+        : "#F56C6C",
+    colorInfo: getPropertyValue("colorInfo")
+        ? getPropertyValue("colorInfo")
+        : "#909399",
+    colorTextPrimary: getPropertyValue("colorTextPrimary")
+        ? getPropertyValue("colorTextPrimary")
+        : "#303133",
+    colorTextRegular: getPropertyValue("colorTextRegular")
+        ? getPropertyValue("colorTextRegular")
+        : "#606266",
+    colorTextSecondary: getPropertyValue("colorTextSecondary")
+        ? getPropertyValue("colorTextSecondary")
+        : "#909399",
+    colorTextPlaceholder: getPropertyValue("colorTextPlaceholder")
+        ? getPropertyValue("colorTextPlaceholder")
+        : "#C0C4CC",
+    borderColorBase: getPropertyValue("borderColorBase")
+        ? getPropertyValue("borderColorBase")
+        : "#DCDFE6",
+    borderColorLight: getPropertyValue("borderColorLight")
+        ? getPropertyValue("borderColorLight")
+        : "#E4E7ED",
+    borderColorLighter: getPropertyValue("borderColorLighter")
+        ? getPropertyValue("borderColorLighter")
+        : "#EBEEF5",
+    borderColorExtraLight: getPropertyValue("borderColorExtraLight")
+        ? getPropertyValue("borderColorExtraLight")
+        : "#F2F6FC",
+    colorWhite: getPropertyValue("colorWhite")
+        ? getPropertyValue("colorWhite")
+        : "#FFFFFF",
+    colorBlack: getPropertyValue("colorBlack")
+        ? getPropertyValue("colorBlack")
+        : "#000000",
+    backgroundColorBase: getPropertyValue("backgroundColorBase")
+        ? getPropertyValue("backgroundColorBase")
+        : "#F5F7FA"
 };
+function getPropertyValue(valueName) {
+    return window
+        .getComputedStyle(window.document.body)
+        .getPropertyValue(`--${valueName}`);
+}
 const ThemeIIEF = (function () {
     class _Theme {
         constructor() {
             this.theme = defaultTheme;
-        }
-        setTheme(theme) {
-            this.theme = Object.assign({}, this.theme, theme);
         }
     }
     let theme = null;
@@ -32,17 +66,10 @@ const ThemeIIEF = (function () {
         }
         return theme;
     }
-    // FIXME: 只有热更新后才能得到最新的设置，可以考虑按照Vue的思想，收集使用者，set时通知它们数据发生了变化
-    // 可以尝试使用 JavaScript 读取 css 变量，这样用户只需要在应用中添加一个css文件即可。但是兼容性并不好。
-    // 还有 React 的 context
-    function setTheme(theme) {
-        getInstance().setTheme(theme);
-    }
     function getTheme() {
         return getInstance().theme;
     }
     return {
-        setTheme,
         getTheme
     };
 })();

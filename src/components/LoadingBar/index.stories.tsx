@@ -2,9 +2,6 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { withKnobs, number } from "@storybook/addon-knobs";
 import LoadingBar from "./index";
-import Theme from "../../styles/theme";
-
-Theme.setTheme({ colorPrimary: "pink" });
 
 storiesOf("Feedback （用户反馈）", module)
   .addDecorator(withKnobs)

@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 class AppBar extends Component {
     render() {
-        return React.createElement("div", null);
+        const AppBar = styled.div `
+      position: fixed;
+    `;
+        return React.createElement(AppBar, null, this.props.children);
     }
 }
 export default AppBar;
