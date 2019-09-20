@@ -23,53 +23,53 @@ export interface Theme {
 }
 
 const defaultTheme: Theme = {
-  colorPrimary: getPropertyValue("colorPrimary")
-    ? getPropertyValue("colorPrimary")
+  colorPrimary: getPropertyValue("sm-colorPrimary")
+    ? getPropertyValue("sm-colorPrimary")
     : "#409EFF",
-  colorSuccess: getPropertyValue("colorSuccess")
-    ? getPropertyValue("colorSuccess")
+  colorSuccess: getPropertyValue("sm-colorSuccess")
+    ? getPropertyValue("sm-colorSuccess")
     : "#67C23A",
-  colorWarning: getPropertyValue("colorWarning")
-    ? getPropertyValue("colorWarning")
+  colorWarning: getPropertyValue("sm-colorWarning")
+    ? getPropertyValue("sm-colorWarning")
     : "#E6A23C",
-  colorDanger: getPropertyValue("colorDanger")
-    ? getPropertyValue("colorDanger")
+  colorDanger: getPropertyValue("sm-colorDanger")
+    ? getPropertyValue("sm-colorDanger")
     : "#F56C6C",
-  colorInfo: getPropertyValue("colorInfo")
-    ? getPropertyValue("colorInfo")
+  colorInfo: getPropertyValue("sm-colorInfo")
+    ? getPropertyValue("sm-colorInfo")
     : "#909399",
-  colorTextPrimary: getPropertyValue("colorTextPrimary")
-    ? getPropertyValue("colorTextPrimary")
+  colorTextPrimary: getPropertyValue("sm-colorTextPrimary")
+    ? getPropertyValue("sm-colorTextPrimary")
     : "#303133",
-  colorTextRegular: getPropertyValue("colorTextRegular")
-    ? getPropertyValue("colorTextRegular")
+  colorTextRegular: getPropertyValue("sm-colorTextRegular")
+    ? getPropertyValue("sm-colorTextRegular")
     : "#606266",
-  colorTextSecondary: getPropertyValue("colorTextSecondary")
-    ? getPropertyValue("colorTextSecondary")
+  colorTextSecondary: getPropertyValue("sm-colorTextSecondary")
+    ? getPropertyValue("sm-colorTextSecondary")
     : "#909399",
-  colorTextPlaceholder: getPropertyValue("colorTextPlaceholder")
-    ? getPropertyValue("colorTextPlaceholder")
+  colorTextPlaceholder: getPropertyValue("sm-colorTextPlaceholder")
+    ? getPropertyValue("sm-colorTextPlaceholder")
     : "#C0C4CC",
-  borderColorBase: getPropertyValue("borderColorBase")
-    ? getPropertyValue("borderColorBase")
+  borderColorBase: getPropertyValue("sm-borderColorBase")
+    ? getPropertyValue("sm-borderColorBase")
     : "#DCDFE6",
-  borderColorLight: getPropertyValue("borderColorLight")
-    ? getPropertyValue("borderColorLight")
+  borderColorLight: getPropertyValue("sm-borderColorLight")
+    ? getPropertyValue("sm-borderColorLight")
     : "#E4E7ED",
-  borderColorLighter: getPropertyValue("borderColorLighter")
-    ? getPropertyValue("borderColorLighter")
+  borderColorLighter: getPropertyValue("sm-borderColorLighter")
+    ? getPropertyValue("sm-borderColorLighter")
     : "#EBEEF5",
-  borderColorExtraLight: getPropertyValue("borderColorExtraLight")
-    ? getPropertyValue("borderColorExtraLight")
+  borderColorExtraLight: getPropertyValue("sm-borderColorExtraLight")
+    ? getPropertyValue("sm-borderColorExtraLight")
     : "#F2F6FC",
-  colorWhite: getPropertyValue("colorWhite")
-    ? getPropertyValue("colorWhite")
+  colorWhite: getPropertyValue("sm-colorWhite")
+    ? getPropertyValue("sm-colorWhite")
     : "#FFFFFF",
-  colorBlack: getPropertyValue("colorBlack")
-    ? getPropertyValue("colorBlack")
+  colorBlack: getPropertyValue("sm-colorBlack")
+    ? getPropertyValue("sm-colorBlack")
     : "#000000",
-  backgroundColorBase: getPropertyValue("backgroundColorBase")
-    ? getPropertyValue("backgroundColorBase")
+  backgroundColorBase: getPropertyValue("sm-backgroundColorBase")
+    ? getPropertyValue("sm-backgroundColorBase")
     : "#F5F7FA"
 };
 
@@ -100,9 +100,7 @@ const ThemeIIEF = (function() {
     return getInstance().theme;
   }
 
-  return {
-    getTheme
-  };
+  return getTheme();
 })();
 
 export default ThemeIIEF;

@@ -26,7 +26,8 @@
     "emitDecoratorMetadata": true,
     "types": ["styled-components"],
     "paths": {
-      "@styles/*": ["./src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "@theme/*": ["src/styles/theme/*"]
     }
   },
   "include": ["src/index.tsx", "src/**/*"], //要打包的目标文件

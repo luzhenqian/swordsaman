@@ -1,3 +1,7 @@
 {
-  "extends": ["tslint-react-hooks"]
+  "extends": ["tslint-react-hooks"],
+  "rules": {
+    "no-implicit-dependencies": [true, ["@theme"]],
+    "no-submodule-imports": [true, ["@theme"]]
+  }
 }

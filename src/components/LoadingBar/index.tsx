@@ -15,8 +15,8 @@ class LoadingBar extends Component<IProgressProps, any> {
   static defaultProps = {
     value: 100,
     percent: 0,
-    color: Theme.getTheme().colorPrimary,
-    failedColor: Theme.getTheme().colorDanger,
+    color: Theme.colorPrimary,
+    failedColor: Theme.colorDanger,
     duration: 800
   };
 
