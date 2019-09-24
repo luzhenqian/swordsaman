@@ -54,7 +54,7 @@ library.add(
   faAngleDoubleUp // 上双箭头
 );
 
-interface IIconProps extends Props {
+export interface IIconProps extends Props {
   icon: IconProp;
 }
 

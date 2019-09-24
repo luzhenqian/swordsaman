@@ -4,6 +4,7 @@ import Input from "./index";
 
 storiesOf("Inputs （输入）", module).add("Input （输入框）", () => (
   <>
-    <Input></Input>
+    <Input />
+    <Input prefixIcon="coffee" />
   </>
 ));
